@@ -1,0 +1,543 @@
+@font-face{
+    font-family: "Montserrat-Regular";
+    src: url("../fonts/Montserrat-Regular.woff2") format("woff2");
+    font-style: normal;
+    font-weight: normal;
+    font-display: swap;
+}
+
+@font-face{
+    font-family: "Montserrat-SemiBold";
+    src: url("../fonts/Montserrat-SemiBold.woff2") format("woff2");
+    font-style: normal;
+    font-weight: normal;
+    font-display: swap;
+}
+
+
+body {
+    margin: 0;
+    background: #6525c4;
+    /*linear-gradient(0deg, rgba(32, 32, 32, 0.1), rgba(32, 32, 32, 0.1)), #7E42DB;*/
+    background-image: url("../img/background.png");
+    font: 13px/20px "Lucida Grande", Tahoma, Verdana, sans-serif;
+    color: #404040;
+}
+
+.wrapper {
+    height: 100vh;
+    position: relative;
+}
+
+#graph {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    top: 0;
+    margin: auto;
+}
+
+.stage {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    opacity: 0.15;
+    z-index: -10;
+}
+
+.entrance {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    top: 0;
+    margin: auto;
+    z-index: 2000;
+}
+
+.friends-list {
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    margin: 0 20px;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.friends-list__hat {
+    position: absolute;
+    left: 0;
+}
+
+.friends-list__mark {
+    position: absolute;
+    right: 0;
+}
+
+#overlay {
+    opacity: 0;
+    transition: 200ms ease-in-out;
+    top: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, .5);
+    pointer-events: none;
+}
+
+#overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.buttonsList {
+    position: absolute;
+	display: block;
+	width: 50%;
+	box-sizing: border-box;
+	text-align: justify;
+    bottom: 5%;
+    margin: auto;
+    right: 0;
+    left: 0;
+}
+
+/* .buttonsList::after {
+	position: relative;
+	display: flex;
+    width: auto;
+	height: auto;
+	box-sizing: border-box;
+	vertical-align: middle;
+    content: '';
+
+} */
+
+.button {
+    position: relative;
+	display: inline-block;
+	width: 200px;
+	height: 50px;
+	box-sizing: border-box;
+	/* text-align: left; */
+	vertical-align: top;
+
+    margin: 4px;
+    border: navajowhite;
+    border-radius: 50px;
+    color: #ffffff;
+    background: linear-gradient(0deg, #7E42DB 0%, #C549E6 100%);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    font-size: 17px;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    font-family: "Montserrat-Regular";
+    text-align: center;
+}
+
+.buttonCity {
+    border: navajowhite;
+    border-radius: 50px;
+    color: #ffffff;
+    background: linear-gradient(0deg, #7E42DB 0%, #C549E6 100%);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    font-size: 17px;
+    letter-spacing: 0.5px;
+    height: 50px;
+    width: 250px;
+    position: absolute;
+    bottom: 50px;
+    left: 0;
+    right: 30%;
+    margin: 0 auto;
+    display: inline-block;
+    cursor: pointer;
+    font-family: "Montserrat-Regular"
+}
+
+.buttonMakeRequest {
+    border: navajowhite;
+    border-radius: 50px;
+    color: #ffffff;
+    background: linear-gradient(0deg, #7E42DB 0%, #C549E6 100%);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    font-size: 17px;
+    letter-spacing: 0.5px;
+    height: 50px;
+    width: 250px;
+    position: absolute;
+    bottom: 50px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    display: inline-block;
+    cursor: pointer;
+    font-family: "Montserrat-Regular"
+}
+
+.buttonModal {
+    border: navajowhite;
+    border-radius: 50px;
+    color: #ffffff;
+    background: linear-gradient(0deg, #7E42DB 0%, #C549E6 100%);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    font-size: 17px;
+    letter-spacing: 0.5px;
+    height: 50px;
+    width: 250px;
+    margin: auto;
+    margin-top: 10%;
+    display: block;
+    cursor: pointer;
+    font-family: "Montserrat-Regular"
+}
+
+.buttonRequest {
+    border: navajowhite;
+    border-radius: 50px;
+    color: #ffffff;
+    background: linear-gradient(0deg, #7E42DB 0%, #C549E6 100%);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    font-size: 17px;
+    letter-spacing: 0.5px;
+    height: 50px;
+    width: 250px;
+    position: absolute;
+    bottom: 50px;
+    left: 0;
+    right: -30%;
+    margin: 0 auto;
+    display: inline-block;
+    cursor: pointer;
+    font-family: "Montserrat-Regular"
+}
+
+.buttonRequestAnswers {
+    border: navajowhite;
+    border-radius: 50px;
+    color: #ffffff;
+    background: linear-gradient(0deg, #7E42DB 0%, #C549E6 100%);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    font-size: 17px;
+    letter-spacing: 0.5px;
+    height: 50px;
+    width: 250px;
+    position: absolute;
+    bottom: 50px;
+    right: 0;
+    left: 30%;
+    margin: 0 auto;
+    display: inline-block;
+    cursor: pointer;
+    font-family: "Montserrat-Regular"
+}
+
+.buttonRequest:hover {
+    background-color: #7E42DB;
+}
+
+.buttonCity:hover {
+    background-color: #7E42DB;
+}
+
+.buttonMakeRequest:hover {
+    background-color: #7E42DB;
+}
+
+.buttonRequestAnswerInside {
+    font-family:"Montserrat-SemiBold" ;
+    border-radius: 50px;
+    border-color: #7E42DB;
+    color: #7E42DB;
+    background: white;
+    /*box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);*/
+    font-size: 17px;
+    letter-spacing: 0.5px;
+    height: 50px;
+    width: 150px;
+    display: inline-block;
+    cursor: pointer;
+    /*background-color: limegreen;*/
+    align-self: center;
+    margin-left: auto;
+}
+
+.friends-list__item {
+    margin: 10px;
+    background: linear-gradient(180deg, #7E42DB 0%, #C549E6 100%);
+    height: 80px;
+    width: 80px;
+    border-radius: 50%;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.icon {
+    /*box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);*/
+    margin: 10px;
+    height: 70px;
+    width: 70px;
+}
+
+.friends-list__item-img {
+    height: 70px;
+    width: 70px;
+    object-fit: cover;
+    display: block;
+    padding: 5px;
+    border-radius: 50%;
+}
+
+.modal{
+    font-family: "Montserrat-Regular";
+    display: none;
+    z-index: 10;
+    background-color: white;
+    position: fixed;
+    top: 5%;
+    left: 50%;
+    transform: translateX( -50%) scale(0);
+    transform: translateY( -5%) scale(0);
+    transition: 200ms ease-in-out;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 80%;
+    max-height: 80%;
+    /* !!!!!!!!!!!     overflow-y: auto;  лучше потом добавить в конкретные модалки       !!!!!!!!!!  */
+
+}
+
+.modalRequestAnswers {
+    width: 500px;
+
+}
+
+.modalRequestAnswers.active{
+    transform: translateX( -50%) scale(1);
+}
+
+.modalCity {
+    width: 500px;
+}
+
+.modalCity.active {
+    transform: translateX( -50%) scale(1);
+}
+
+.modalMakeRequest {
+    width: 500px;
+
+}
+
+.modalMakeRequest.active{
+    transform: translateX( -50%) scale(1);
+}
+
+.modalRequest {
+    width: 500px;
+
+}
+
+.modalRequest.active{
+    transform: translateX( -50%) scale(1);
+}
+
+.modal-body__person-card {
+    display: flex;
+    flex-direction: row;
+}
+
+.modal-header{
+    padding: 10px 15px;
+    /*display: flex;*/
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header .title{
+    font-family: "Montserrat-SemiBold";
+    font-size: 25px;
+    text-align: center;
+    padding-bottom: 0;
+}
+
+.modal-header .close-button {
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background: none;
+    font-size: 1.25rem;
+    font-weight: bold;
+    position: absolute;
+    right: 5%;
+    top: 4%;
+}
+
+.modal-body {
+    padding: 10px 0;
+}
+
+.modal-body__person-card__info__city{
+    color: gray;
+    margin-top: 0;
+}
+
+.modal-body__person-card__info{
+    margin-left: 10px;
+}
+
+.modal-body__request-text{
+    font-family: "Montserrat-SemiBold";
+    font-size: 17px;
+}
+
+.modal-body__request-answer{
+    margin-top: 5%;
+    /* border: 4px;*/
+    /*background-color: #dfc9ff; rgb(237,237,237);*/
+    padding: 15px;
+    border-radius: 4%;
+
+    /* border: solid 2px #7E42DB;*/
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+
+    /*padding: 10px;  Поля вокруг текста */
+    overflow-y: auto;
+}
+
+
+.modal-body__request-answer:hover {
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
+
+.AnsCards{
+    max-height: 60vh;
+    /*margin: 0 25px;*/
+    overflow-x: hidden;
+    overflow-y: scroll;
+    padding-top: 0;
+    padding-bottom: 26px;
+    padding-left: 26px;
+    padding-right: 26px;
+}
+
+.AnsCards-inside{
+    width: 100%;
+    /*margin: 0 0px;*/
+}
+
+.AnsCards::-webkit-scrollbar {
+    width:0px;
+}
+
+.container {
+    width: 400px;
+    text-align: left;
+}
+
+.container > .dropdown {
+    vertical-align: top;
+}
+
+.dropdown {
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    height: 28px;
+    width: 470px;
+    background: #f2f2f2;
+    border: 1px solid;
+    border-color: white #f7f7f7 whitesmoke;
+    border-radius: 3px;
+    background-image: -webkit-linear-gradient(top, transparent, rgba(0, 0, 0, 0.06));
+    background-image: -moz-linear-gradient(top, transparent, rgba(0, 0, 0, 0.06));
+    background-image: -o-linear-gradient(top, transparent, rgba(0, 0, 0, 0.06));
+    background-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.06));
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
+}
+
+.dropdown:before, .dropdown:after {
+    content: '';
+    position: absolute;
+    z-index: 2;
+    top: 9px;
+    right: 10px;
+    width: 0;
+    height: 0;
+    border: 4px dashed;
+    border-color: #888888 transparent;
+    pointer-events: none;
+}
+
+.dropdown:before {
+    border-bottom-style: solid;
+    border-top: none;
+}
+
+.dropdown:after {
+    margin-top: 7px;
+    border-top-style: solid;
+    border-bottom: none;
+}
+
+.dropdown-select {
+    position: relative;
+    width: 130%;
+    margin: 0;
+    padding: 6px 8px 6px 10px;
+    height: 28px;
+    line-height: 14px;
+    font-size: 12px;
+    color: #62717a;
+    text-shadow: 0 1px white;
+    background: #f2f2f2; /* Fallback for IE 8 */
+    background: rgba(0, 0, 0, 0) !important; /* "transparent" doesn't work with Opera */
+    border: 0;
+    border-radius: 0;
+    -webkit-appearance: none;
+}
+
+.dropdown-select:focus {
+    z-index: 3;
+    width: 100%;
+    color: #394349;
+    outline: 2px solid #49aff2;
+    outline: 2px solid -webkit-focus-ring-color;
+    outline-offset: -2px;
+}
+
+.dropdown-select > option {
+    margin: 3px;
+    padding: 6px 8px;
+    text-shadow: none;
+    background: #f2f2f2;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+/* Fix for IE 8 putting the arrows behind the select element. */
+.lt-ie9 .dropdown {
+    z-index: 1;
+}
+
+.lt-ie9 .dropdown-select {
+    z-index: -1;
+}
+
+.lt-ie9 .dropdown-select:focus {
+    z-index: 3;
+}
+
+/* Dirty fix for Firefox adding padding where it shouldn't. */
+@-moz-document url-prefix() {
+    .dropdown-select {
+        padding-left: 6px;
+    }
+}
