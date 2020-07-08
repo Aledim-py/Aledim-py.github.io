@@ -293,7 +293,7 @@ body {
     border-radius: 50%;
 }
 
-.modal{
+.modal {
     font-family: "Montserrat-Regular";
     display: none;
     z-index: 10;
@@ -306,7 +306,7 @@ body {
     transition: 200ms ease-in-out;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 10px;
-    padding: 20px;
+    padding: 20px 0px 20px 0px;
     max-width: 80%;
     max-height: 80%;
     /* !!!!!!!!!!!     overflow-y: auto;  лучше потом добавить в конкретные модалки       !!!!!!!!!!  */
@@ -380,7 +380,7 @@ body {
 }
 
 .modal-body {
-    padding: 10px 0;
+    padding: 0px 25px;
 }
 
 .modal-body__person-card__info__city{

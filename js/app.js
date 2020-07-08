@@ -26,7 +26,9 @@ const Selectors = {
     modals: {
         overlay: document.getElementById('overlay'),
         openButtons: document.querySelectorAll('[data-modal-target]'),
-        closeButtons: document.querySelectorAll('[data-close-button]')
+        closeButtons: document.querySelectorAll('[data-close-button]'),
+        changeCity: document.querySelector('[data-change-city]'),
+        answerButton: document.querySelector('[data-answer-button]')
     }
 };
 
@@ -118,6 +120,28 @@ const App = {
 
             const json = await response.json();
             console.log('Ответы получены: ' + json);
+        },
+        
+        postAnswer: async function(id, answer) {
+            const response = await fetch('/answer', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify({
+                    rid: id,
+                    text: answer
+                })
+            });
+
+            if (!response.ok) {
+                alert('Не удалось ответить на событие, попробуйте ещё раз, пожалуйста');
+                throw new Error('Got non-2XX response from API server.');
+                return;
+            }
+
+            // Ответ от сервера тут
+            alert('Ответ засчитан');
         }
     },
 
@@ -125,11 +149,58 @@ const App = {
        Обновление данных
     */
     update: {
-        network: async function () {
-            return;
+        network: async function(thisIndex) {
+            if (typeof Data.nodes[thisIndex] === 'undefined') return;
+
+            let header = document.querySelector(`
+                #modalRequest >
+                div.modal-header >
+                div.title
+            `);
+            let image = document.querySelector(`
+                #modalRequest >
+                div.modal-body >
+                div.modal-body__person-card >
+                img.modal-body__person-card__img
+            `);
+            let text = document.querySelector(`
+                #modalRequest >
+                div.modal-body >
+                p
+            `);
+            let name = document.querySelector(`
+                #modalRequest >
+                div.modal-body >
+                div.modal-body__person-card >
+                div.modal-body__person-card__info >
+                p:first-child
+            `);
+            let city = document.querySelector(`
+                #modalRequest >
+                div.modal-body >
+                div.modal-body__person-card >
+                div.modal-body__person-card__info >
+                p:last-child
+            `);
+            
+            let pAns = document.querySelector(`
+                #modalAnswer >
+                div.modal-body >
+                p
+            `);
+
+            header.innerHTML = 'Что-то из графа';
+            pAns.innerHTML = thisIndex.toString();
+            text.innerHTML = Data.nodes[thisIndex].text;
+            image.src = Data.nodes[thisIndex].photo;
+            name.innerHTML = Data.nodes[thisIndex].name + ' ' + Data.nodes[thisIndex].surname;
+            city.innerHTML = Data.nodes[thisIndex].user_city || '';
         },
 
-        all: async function () {
+        all: async function() {
+            Network.nodes = [];
+            Network.edges = [];
+            
             // Получаем cookies
             await App.update.cookies();
 
@@ -160,7 +231,7 @@ const App = {
             date = date.toUTCString();
             document.cookie = 'city=' + newCity + '; expires=' + date + '; samesite=lax; secure';
 
-            document.location.reload(true);
+            //document.location.reload(true);
             // await App.request.getData();
 
             // Render.network(Network);
@@ -183,6 +254,9 @@ const App = {
                         case 'modalRequest':
                             await App.update.citizensModal(target, index);
                             break;
+                        case 'modalAnswer':
+                            //return;
+                            //await App.update.answerModal(target, index);
                         default:
                             break;
                     };
@@ -197,6 +271,28 @@ const App = {
                     App.action.closeModal(modal);
                 });
             });
+            
+            Selectors.modals.changeCity.addEventListener('click', async () => {
+                const newCity = document.querySelector('select.dropdown-select-city').value;
+                
+                await App.update.city(newCity);
+                await App.update.all();
+                
+                const modal = Selectors.modals.changeCity.closest('.modal');
+                App.action.closeModal(modal);
+            });
+            
+            Selectors.modals.answerButton.addEventListener('click', async () => {
+                const answer = document.querySelector('#modalAnswer > div.modal-body > textarea').innerHTML;
+                const id = parseImt(document.quetySelector('#modalAnswer > div.modal-body > p').innerHTML, 10);
+                
+                await App.request.postAnswer(id, answer);
+                // await App.update.city(newCity);
+                // await App.update.all();
+                
+                const modal = Selectors.modals.answerButton.closest('.modal');
+                App.action.closeModal(modal);
+            });
 
             Selectors.modals.overlay.addEventListener('click', () => {
                 const modals = document.querySelectorAll('.modal.active');
@@ -204,6 +300,10 @@ const App = {
                     App.action.closeModal(modal);
                 });
             });
+        },
+        
+        answerModal: async function(thisModal, thisIndex) {
+            return;
         },
 
         anonymousModal: async function(thisModal, thisIndex) {
@@ -265,7 +365,7 @@ const App = {
             text.innerHTML = Data.citizens[thisIndex].text;
             image.src = Data.citizens[thisIndex].photo;
             name.innerHTML = Data.citizens[thisIndex].name + ' ' + Data.citizens[thisIndex].surname;
-            city.innerHTML = Data.citizens[thisIndex].user_city;
+            city.innerHTML = Data.citizens[thisIndex].user_city || '';
         }
     },
 
@@ -279,6 +379,10 @@ const App = {
                 && typeof Data.anonymous[thisIndex] === 'undefined') return;
             if (thisTarget === 'modalRequest'
                 && typeof Data.citizens[thisIndex] === 'undefined') return;
+            if (thisTarget === 'modalGraph'
+                && (typeof Data.nodes[thisIndex] === 'undefined'
+                    || Data.nodes[thisIndex].text == null
+                    || thisIndex === 0)) return;
             thisModal.style.display = 'block';
             thisModal.classList.add('active');
             Selectors.modals.overlay.classList.add('active');
@@ -310,10 +414,7 @@ const App = {
                 top: 0;
                 margin: auto;
             `;
-            // let data = {
-            //     nodes: nodes,
-            //     edges: edges
-            // }; linear-gradient(180deg, #7E42DB 0%, #C549E6 100%)linear-gradient(#7E42DB, #C549E6)
+            
             let options = {
                 nodes: {
                     borderWidth: 8,
@@ -322,10 +423,20 @@ const App = {
                         node: async function(values, id, selected, hovering) {
                             values.borderColor = '#ffffff';
                             values.borderWidth = '10';
+                            
+                            const modal = document.querySelector('#modalRequest');
+                            
+                            await App.update.network(id - 1);
+                            App.action.openModal(modal, 'modalGraph', id - 1);
+                            
+                            //selected = false;
+                            setTimeout(() => {
+                                networkVis.selectEdges([]);
+                            }, 250);
                         }
                     },
                     color: {
-                        border: "linear-gradient(180deg, #7e42db 0%, #c549e6 100%)",
+                        border: "#c549e6",
                         background: "#7e42db",
                         highlight: {
                             border: "#ffffff"
@@ -344,7 +455,7 @@ const App = {
             let networkVis = null;
             setTimeout(() => {
                 networkVis = new vis.Network(container, network, options);
-            }, 250);
+            }, 350);
         },
 
         citizens: function() {
@@ -352,7 +463,11 @@ const App = {
             let elements = document.querySelectorAll("div.friends-list__item > img.friends-list__item-img");
             for (let i = 0; i < 5; ++i) {
                 //elements[i].src = anonymous[i]['photo'];
-                elements[i + 5].src = Data.citizens[i]['photo'];
+                if (typeof Data.citizens[i]['photo'] === undefined
+                    || Data.citizens[i]['photo'] === 'https://vk.com/images/camera_400.png?ava=1'
+                ) {
+                    elements[i + 5].src = 'https://vk.com/images/camera_400.png?ava=1'; 'img/default.png';
+                } else elements[i + 5].src = Data.citizens[i]['photo'];
             }
         },
 
