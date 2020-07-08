@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "homepage": "https://Aledim-py.github.io/vk_test/",
+  "homepage": "https://Aledim-py.github.io/Aledim-py.github.io/",
   "scripts": {
     "start": "cross-env PORT=10888 react-scripts start",
     "build": "react-scripts build",
